@@ -1,0 +1,17 @@
+
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0.31
+    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-fromrevious-series.html#upgrade-caching-sha2assword
+    # (this is just an example, not intended to be a production configuration)
+    #    command: --default-authenticationlugin=mysql_native_password
+    #    restart: always
+    ports:
+      - "3306:3306"
+    container_name: mysqlBookStore
+    environment:
+      MYSQL_USER: jonathanADMIN
+      MYSQL_DATABASE: bookstore
+      MYSQL_PASSWORD: bookstore_jonathan
+      MYSQL_ROOT_PASSWORD: root
