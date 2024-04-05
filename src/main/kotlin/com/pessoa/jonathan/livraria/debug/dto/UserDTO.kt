@@ -11,7 +11,9 @@ data class UserDTO(
     @Schema
     val email: String,
     @Schema
-    val token: String? = null
+    val token: String? = null,
+
+    val roles: String?
 )
 
-fun UserEntity.toUserDTO() : UserDTO = UserDTO(this.id, this.name, this.email)
+fun UserEntity.toUserDTO() : UserDTO = UserDTO(this.id, this.name, this.email, roles = this.roles?.getOrNull(0)?.name)

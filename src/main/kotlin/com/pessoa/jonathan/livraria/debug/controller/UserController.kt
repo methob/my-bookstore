@@ -31,10 +31,8 @@ class UserController(private val userService: UserService,
         return if (user.isPresent) {
             val userPresent = user.get()
             if (passwordEncoder.matches(payload.password, userPresent.password)) {
-                userPresent.isActive = true
-                userService.saveUser(userPresent)
                 val token = JwtUtils.generateToken(payload.email)
-                ResponseEntity.ok(UserDTO(userPresent.id, userPresent.name,userPresent.email, token))
+                ResponseEntity.ok(UserDTO(userPresent.id, userPresent.name,userPresent.email, token, userPresent.roles.getOrNull(0)?.name))
             } else {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
             }
@@ -49,6 +47,12 @@ class UserController(private val userService: UserService,
         return userService.listUsers().stream().map {
             it.toUserDTO()
         }.collect(Collectors.toList())
+    }
+
+    @PostMapping("/update")
+    @Operation(description = "Atualiza usuários ( temporário, vou criar roles)")
+    fun updateUser()  {
+
     }
 
     @DeleteMapping("/delete")

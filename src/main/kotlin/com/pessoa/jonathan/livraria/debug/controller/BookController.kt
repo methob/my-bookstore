@@ -8,8 +8,10 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.lang.Exception
 import java.util.*
 import java.util.stream.Collectors
+import kotlin.jvm.optionals.getOrElse
 
 @RestController
 @RequestMapping("/book")
@@ -65,11 +67,12 @@ class BookController(
                 bookEnt.status = BookStatusEnum.FREE.name
                 bookService.saveBook(bookEnt)
                 val historic = rentalHistoricService.getHistoric(payload.userId, payload.bookId)
-                if (historic.isPresent) {
+                historic.map { item ->
                     historic.get().returnDate = Date()
-                    rentalHistoricService.updateHistoric(historic.get())
-                } else {
+                    rentalHistoricService.updateHistoric(item)
+                }.orElseGet {
                     // TODO TRATAR
+                    throw Exception("Deu ruim")
                 }
             }
         } else {

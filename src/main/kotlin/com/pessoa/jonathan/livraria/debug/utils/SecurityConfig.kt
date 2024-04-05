@@ -9,10 +9,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
-
 @Configuration
 @EnableWebSecurity
-//@EnableMethodSecurity(securedEnabled = true)
 class SecurityConfig(val userService: UserService)  {
 
     @Bean
@@ -20,7 +18,8 @@ class SecurityConfig(val userService: UserService)  {
         http.csrf { csrf -> csrf.disable() }.authorizeHttpRequests { customizer ->
                     customizer.requestMatchers(
                             "/user/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                              .anyRequest().authenticated()
+                            .requestMatchers("/user/list", "/user/delete").hasRole("BOOKSTORE_ADMIN")
+                            .anyRequest().authenticated()
                 }.addFilterBefore(JwtAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter::class.java)
         return http.build()
     }

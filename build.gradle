@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'mysql:mysql-connector-java:8.0.28'
 	implementation 'com.auth0:java-jwt:3.18.1'
+	implementation 'org.flywaydb:flyway-mysql'
+	implementation 'com.rabbitmq:amqp-client:5.9.0'
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'

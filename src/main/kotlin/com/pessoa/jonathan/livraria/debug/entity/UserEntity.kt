@@ -11,7 +11,8 @@ data class UserEntity(
     val name: String,
     var email: String,
     val password: String,
-    var isActive: Boolean = false
+    @ManyToMany(fetch = FetchType.EAGER)
+    val roles : MutableList<RoleEntity> = ArrayList()
 )
 
 

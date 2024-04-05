@@ -15,3 +15,15 @@ services:
       MYSQL_DATABASE: bookstore
       MYSQL_PASSWORD: bookstore_jonathan
       MYSQL_ROOT_PASSWORD: root
+
+  rabbitmq:
+    image: "rabbitmq:3-management"
+    ports:
+        - "5672:5672"
+        - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: "SWQOKODSQALRPCLNMEQG"
+      RABBITMQ_DEFAULT_USER: ${DBEAVER_USER}
+      RABBITMQ_DEFAULT_PASS: ${DBEAVER_PASSWORD}
+    labels:
+      NAME: "rabbitmq"
