@@ -9,6 +9,7 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import java.util.stream.Collectors
 
@@ -32,7 +33,7 @@ class UserController(private val userService: UserService,
             val userPresent = user.get()
             if (passwordEncoder.matches(payload.password, userPresent.password)) {
                 val token = JwtUtils.generateToken(payload.email)
-                ResponseEntity.ok(UserDTO(userPresent.id, userPresent.name,userPresent.email, token, userPresent.roles.getOrNull(0)?.name))
+                ResponseEntity.ok(UserDTO(userPresent.id, userPresent.name,userPresent.email, token))
             } else {
                 ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
             }
@@ -57,6 +58,7 @@ class UserController(private val userService: UserService,
 
     @DeleteMapping("/delete")
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Transactional
     @Operation(description = "deleta usuarios do banco de dados ( temporário, vou criar roles)")
     fun removeUser(@RequestHeader email: String) {
         userService.removeUserByEmail(email)

@@ -2,6 +2,7 @@ package com.pessoa.jonathan.livraria.debug.dto
 
 import com.pessoa.jonathan.livraria.debug.entity.UserEntity
 import io.swagger.v3.oas.annotations.media.Schema
+import kotlin.streams.toList
 
 data class UserDTO(
     @Schema
@@ -13,7 +14,14 @@ data class UserDTO(
     @Schema
     val token: String? = null,
 
-    val roles: String?
+    val roles: List<String>? = null
 )
 
-fun UserEntity.toUserDTO() : UserDTO = UserDTO(this.id, this.name, this.email, roles = this.roles?.getOrNull(0)?.name)
+fun UserEntity.toUserDTO() : UserDTO = UserDTO(
+        id = this.id,
+        name = this.name,
+        email = this.email,
+        roles = this.roles.stream().map {
+            it.name
+        }.toList()
+)

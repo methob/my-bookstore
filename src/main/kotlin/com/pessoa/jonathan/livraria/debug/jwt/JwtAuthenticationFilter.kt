@@ -15,10 +15,13 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource
 import org.springframework.web.filter.OncePerRequestFilter
+import java.util.regex.Pattern
 import java.util.stream.Collectors
 
 
 class JwtAuthenticationFilter(private val userService: UserService) : OncePerRequestFilter() {
+
+    private val regexPattern = Pattern.compile("^/(swagger|api-docs|user/login|user/create).*")
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val token = request.getHeader("Authorization")
@@ -51,6 +54,11 @@ class JwtAuthenticationFilter(private val userService: UserService) : OncePerReq
     }
 
     private fun mapRolesToAuthorities(roles: List<RoleEntity>) : List<SimpleGrantedAuthority> {
-        return roles.stream().map { role -> SimpleGrantedAuthority(role.name) }.collect(Collectors.toList())
+        return roles.stream().map{ role -> SimpleGrantedAuthority("ROLE_${role.name}") }.collect(Collectors.toList())
+    }
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        val path = request.requestURI
+        return regexPattern.matcher(path).matches()
     }
 }

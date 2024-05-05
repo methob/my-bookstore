@@ -15,12 +15,17 @@ class SecurityConfig(val userService: UserService)  {
 
     @Bean
     fun configure(http: HttpSecurity) : SecurityFilterChain {
-        http.csrf { csrf -> csrf.disable() }.authorizeHttpRequests { customizer ->
-                    customizer.requestMatchers(
-                            "/user/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
-                            .requestMatchers("/user/list", "/user/delete").hasRole("BOOKSTORE_ADMIN")
-                            .anyRequest().authenticated()
-                }.addFilterBefore(JwtAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter::class.java)
+        http.authorizeHttpRequests { customizer ->
+            customizer.requestMatchers("/user/list", "/user/delete").hasRole("BOOKSTORE_ADMIN")
+                      .requestMatchers(*swaggerURL).permitAll()
+                      .requestMatchers("/user/**").permitAll()
+                      .anyRequest().authenticated()
+        }.addFilterBefore(JwtAuthenticationFilter(userService), UsernamePasswordAuthenticationFilter::class.java)
+         .csrf { csrf -> csrf.disable() }
         return http.build()
+    }
+
+    companion object {
+        val swaggerURL  = arrayOf("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html")
     }
 }
