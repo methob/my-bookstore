@@ -21,7 +21,7 @@ import java.util.stream.Collectors
 
 class JwtAuthenticationFilter(private val userService: UserService) : OncePerRequestFilter() {
 
-    private val regexPattern = Pattern.compile("^/(swagger|api-docs|user/login|user/create).*")
+    private val regexPattern = Pattern.compile(".*/(swagger|api-docs|user/login|user/create).*")
 
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
         val token = request.getHeader("Authorization")
@@ -40,11 +40,15 @@ class JwtAuthenticationFilter(private val userService: UserService) : OncePerReq
                     }
                 }
             } else {
-                throw BookStoreException("Deu ruim")
+                throw BookStoreException("Usuário não encontrado")
             }
         }.onFailure { ex ->
-            val error = ErrorDTO(ex.message, HttpStatus.BAD_REQUEST)
-            response.status = error.code.value()
+            val error = (ex as? BookStoreException)?.let {
+                ErrorDTO(it.message, it.code)
+            }?.run {
+                ErrorDTO(ex.message, HttpStatus.BAD_REQUEST)
+            }
+            response.status = error?.code?.value() ?: HttpStatus.BAD_REQUEST.value()
             response.contentType = "application/json"
             response.writer.println(ObjectMapper().writeValueAsString(error))
             return

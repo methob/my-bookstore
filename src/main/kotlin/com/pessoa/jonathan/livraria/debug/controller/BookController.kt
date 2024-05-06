@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*
 import java.lang.Exception
 import java.util.*
 import java.util.stream.Collectors
-import kotlin.jvm.optionals.getOrElse
 
 @RestController
 @RequestMapping("/book")
@@ -19,7 +18,6 @@ class BookController(
         val bookService: BookService,
         val rentalHistoricService: RentalHistoricService) {
 
-    //    @Secured("ROLE_USER")
     @GetMapping("/list")
     @Operation(description = "lista livros")
     fun listBooks(): List<BookDTO>  {

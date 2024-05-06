@@ -1,6 +1,7 @@
 package com.pessoa.jonathan.livraria.debug.controller
 
 import com.pessoa.jonathan.livraria.debug.dto.*
+import com.pessoa.jonathan.livraria.debug.exception.BookStoreException
 import com.pessoa.jonathan.livraria.debug.service.UserService
 import com.pessoa.jonathan.livraria.debug.utils.JwtUtils
 import io.swagger.v3.oas.annotations.Operation
@@ -35,10 +36,10 @@ class UserController(private val userService: UserService,
                 val token = JwtUtils.generateToken(payload.email)
                 ResponseEntity.ok(UserDTO(userPresent.id, userPresent.name,userPresent.email, token))
             } else {
-                ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+                throw BookStoreException("Usuário não encontrado", HttpStatus.UNAUTHORIZED)
             }
         } else {
-            ResponseEntity.notFound().build()
+            throw BookStoreException("Usuário não encontrado", HttpStatus.NOT_FOUND)
         }
     }
 
