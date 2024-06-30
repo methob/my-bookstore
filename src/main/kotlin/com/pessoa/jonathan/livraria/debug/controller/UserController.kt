@@ -5,7 +5,6 @@ import com.pessoa.jonathan.livraria.debug.exception.BookStoreException
 import com.pessoa.jonathan.livraria.debug.service.UserService
 import com.pessoa.jonathan.livraria.debug.utils.JwtUtils
 import io.swagger.v3.oas.annotations.Operation
-import io.swagger.v3.oas.annotations.headers.Header
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

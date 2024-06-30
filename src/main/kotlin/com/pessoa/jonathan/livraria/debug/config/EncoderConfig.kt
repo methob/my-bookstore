@@ -1,4 +1,4 @@
-package com.pessoa.jonathan.livraria.debug.utils
+package com.pessoa.jonathan.livraria.debug.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

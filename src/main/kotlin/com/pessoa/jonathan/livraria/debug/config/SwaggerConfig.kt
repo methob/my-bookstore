@@ -1,4 +1,4 @@
-package com.pessoa.jonathan.livraria.debug.utils
+package com.pessoa.jonathan.livraria.debug.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI

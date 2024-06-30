@@ -1,4 +1,4 @@
-package com.pessoa.jonathan.livraria.debug.utils
+package com.pessoa.jonathan.livraria.debug.config
 
 import com.pessoa.jonathan.livraria.debug.jwt.JwtAuthenticationFilter
 import com.pessoa.jonathan.livraria.debug.service.UserService

@@ -2,6 +2,7 @@ package com.pessoa.jonathan.livraria.debug.controller
 
 import com.pessoa.jonathan.livraria.debug.dto.*
 import com.pessoa.jonathan.livraria.debug.service.BookService
+import com.pessoa.jonathan.livraria.debug.service.QueueService
 import com.pessoa.jonathan.livraria.debug.service.RentalHistoricService
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -16,7 +17,8 @@ import java.util.stream.Collectors
 @RequestMapping("/book")
 class BookController(
         val bookService: BookService,
-        val rentalHistoricService: RentalHistoricService) {
+        val rentalHistoricService: RentalHistoricService,
+        val queue: QueueService) {
 
     @GetMapping("/list")
     @Operation(description = "lista livros")
@@ -47,6 +49,7 @@ class BookController(
                 bookEnt.status = BookStatusEnum.BORROWED.name
                 bookService.saveBook(bookEnt)
                 rentalHistoricService.createHistoric(user.get(), bookEnt)
+                queue.sendMessage(bookEnt.toString())
             }
         } else {
             // TODO TRATAR
