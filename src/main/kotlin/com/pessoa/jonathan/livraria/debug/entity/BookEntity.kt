@@ -1,6 +1,7 @@
 package com.pessoa.jonathan.livraria.debug.entity
 
 import jakarta.persistence.*
+import java.io.Serializable
 
 @Entity
 @Table(name = "book_bookstore")
@@ -13,4 +14,4 @@ data class BookEntity(
     val description: String,
     val gender: String,
     var status: String
-)
+): Serializable
